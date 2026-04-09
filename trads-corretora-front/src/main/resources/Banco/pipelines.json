@@ -1,0 +1,20 @@
+[
+  {
+    "id": 0,
+    "nome": "Vendas Padrão",
+    "sort": 0,
+    "descricao": "Funil principal; ciclo médio e ticket médio."
+  },
+  {
+    "id": 10,
+    "nome": "Enterprise",
+    "sort": 10,
+    "descricao": "Ciclo longo, mais etapas, tickets maiores."
+  },
+  {
+    "id": 20,
+    "nome": "Renovação",
+    "sort": 20,
+    "descricao": "Poucas etapas, ciclo curto, alta conversão."
+  }
+]

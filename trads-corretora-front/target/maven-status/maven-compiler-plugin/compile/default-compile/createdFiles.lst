@@ -1,0 +1,6 @@
+com\example\tradscorretora\entity\PipelineEntity.class
+com\example\tradscorretora\entity\MovementEntity.class
+com\example\tradscorretora\TradsCorretoraApplication.class
+com\example\tradscorretora\entity\UserEntity.class
+com\example\tradscorretora\entity\StageEntity.class
+com\example\tradscorretora\entity\BusinessDealEntity.class
