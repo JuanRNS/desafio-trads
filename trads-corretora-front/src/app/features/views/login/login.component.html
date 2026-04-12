@@ -1,0 +1,88 @@
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="flex justify-center items-center h-16 w-16 bg-blue-600 rounded-full mx-auto shadow-lg">
+      <span class="material-symbols-outlined w-8 h-8 text-white !text-[32px]">
+        lock
+      </span>
+    </div>
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 tracking-tight">
+      Acesso ao Sistema
+    </h2>
+    <p class="mt-2 text-center text-sm text-gray-600">
+      Trads Corretora
+    </p>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
+
+      @if (errorMessage()) {
+      <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined !text-[24px] h-5 w-5 text-red-400">
+            cancel
+          </span>
+          <p class="text-sm text-red-700">
+            {{ errorMessage() }}
+          </p>
+        </div>
+      </div>
+      }
+
+      <form class="space-y-6" [formGroup]="loginForm" (submit)="onSubmit()">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">
+            Endereço de Email
+          </label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <input id="email" name="email" type="email" autocomplete="email" required formControlName="email"
+              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+              [class.border-red-300]="email?.invalid && (email?.dirty || email?.touched)"
+              [class.text-red-900]="email?.invalid && (email?.dirty || email?.touched)"
+              [class.focus:ring-red-500]="email?.invalid && (email?.dirty || email?.touched)"
+              [class.focus:border-red-500]="email?.invalid && (email?.dirty || email?.touched)"
+              placeholder="seu@email.com.br">
+          </div>
+          @if (email?.invalid && (email?.dirty || email?.touched)) {
+          <p class="mt-2 text-sm text-red-600" id="email-error">
+            Por favor, insira um email válido.
+          </p>
+          }
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">
+            Senha
+          </label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <input id="password" name="password" type="password" autocomplete="current-password" required
+              formControlName="password"
+              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+              [class.border-red-300]="password?.invalid && (password?.dirty || password?.touched)"
+              [class.text-red-900]="password?.invalid && (password?.dirty || password?.touched)"
+              [class.focus:ring-red-500]="password?.invalid && (password?.dirty || password?.touched)"
+              [class.focus:border-red-500]="password?.invalid && (password?.dirty || password?.touched)"
+              placeholder="••••••••">
+          </div>
+          @if (verifyPassword) {
+          <p class="mt-2 text-sm text-red-600" id="password-error">
+            A senha deve conter no mínimo 6 caracteres.
+          </p>
+          }
+        </div>
+
+        <div>
+          <button type="submit" [disabled]="isLoading()"
+            class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (isLoading()) {
+            <span class="material-symbols-outlined animate-spin -ml-1 mr-3 h-5 w-5 text-white">
+              progress_activity
+            </span>
+            }
+            {{ isLoading() ? 'Entrando...' : 'Entrar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

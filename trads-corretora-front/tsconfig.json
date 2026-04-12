@@ -15,6 +15,9 @@
     "target": "ES2022",
     "module": "preserve"
   },
+  "exclude": [
+    "**/trads-corretora-back/**"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
