@@ -1,8 +1,11 @@
-package com.example.tradscorretora.infrastructure.services;
+package com.example.tradscorretora.config;
 
 import com.example.tradscorretora.domain.entity.*;
+import com.example.tradscorretora.domain.entity.views.VwTransicoes;
+import com.example.tradscorretora.domain.enums.RoleEnum;
 import com.example.tradscorretora.infrastructure.repositories.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JsonNode;
@@ -14,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class JsonData implements CommandLineRunner {
@@ -24,13 +28,19 @@ public class JsonData implements CommandLineRunner {
     private final BusinessDealRepository businessDealRepository;
     private final MovementRepository movementRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final PasswordEncoder passwordEncoder;
+    private final UserAcessRepository userAcessRepository;
+    private final VwTransicoesRepository vwTransicoesRepository;
 
-    public JsonData(PipelineRepository pipelineRepository, StageRepository stageRepository, UserRepository userRepository, BusinessDealRepository businessDealRepository, MovementRepository movementRepository) {
+    public JsonData(PipelineRepository pipelineRepository, VwTransicoesRepository vwTransicoesRepository, StageRepository stageRepository, UserRepository userRepository, BusinessDealRepository businessDealRepository, MovementRepository movementRepository, PasswordEncoder passwordEncoder, UserAcessRepository userAcessRepository) {
         this.pipelineRepository = pipelineRepository;
         this.stageRepository = stageRepository;
         this.userRepository = userRepository;
         this.businessDealRepository = businessDealRepository;
         this.movementRepository = movementRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userAcessRepository = userAcessRepository;
+        this.vwTransicoesRepository = vwTransicoesRepository;
     }
 
 
@@ -41,6 +51,7 @@ public class JsonData implements CommandLineRunner {
         importUsers();
         importDeals();
         importMovements();
+        createUserAccess();
 //        if (pipelineRepository.count() == 0) {
 //            System.out.println("Importando dados do JSON para o banco de dados...");
 //            importPipelines();
@@ -195,4 +206,33 @@ public class JsonData implements CommandLineRunner {
         movementRepository.saveAll(movementsToSave);
         System.out.println("Movimentações importados com sucesso!");
     }
+
+    private void createUserAccess() {
+        UserAcess admin = new UserAcess();
+        admin.setId(1L);
+        admin.setEmail("admin@demo.crm");
+        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setRole(RoleEnum.ADMIN);
+
+        UserAcess manager = new UserAcess();
+        manager.setId(2L);
+        manager.setEmail("manager@demo.crm");
+        manager.setPassword(passwordEncoder.encode("manager123"));
+        manager.setRole(RoleEnum.MANAGER);
+
+        Optional<UserEntity> userValue = userRepository.findById(112L);
+
+        UserAcess user = new UserAcess();
+        userValue.ifPresent(userEntity -> user.setEmail(userEntity.getEmail()));
+        userValue.ifPresent(userEntity -> user.setId(userEntity.getId()));
+        user.setPassword(passwordEncoder.encode("user123"));
+        user.setRole(RoleEnum.USER);
+
+        System.out.println("✅ Criando usuários de acesso...");
+        userAcessRepository.save(admin);
+        userAcessRepository.save(manager);
+        userAcessRepository.save(user);
+        System.out.println("Usuários de acesso criados com sucesso!");
+    }
+
 }
