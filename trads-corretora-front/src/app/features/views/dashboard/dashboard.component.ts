@@ -86,36 +86,6 @@ export class DashboardComponent {
     });
   }
 
-  public filteredGains = computed(() => {
-    const filter = this.dateFilter();
-    const all = this.gains();
-    if (!filter) return all;
-    return all.filter(g => {
-      const d = new Date(g.winDate);
-      return d >= filter.start && d <= filter.end;
-    });
-  });
-
-  public filteredTransitions = computed(() => {
-    const filter = this.dateFilter();
-    const all = this.transitions();
-    if (!filter) return all;
-    return all.filter(s => {
-      const d = new Date(s.transition);
-      return d >= filter.start && d <= filter.end;
-    });
-  })
-
-  public filteredStages = computed(() => {
-    const filter = this.dateFilter();
-    const all = this.timeStages();
-    if (!filter) return all;
-    return all.filter(s => {
-      const d = new Date(s.end);
-      return d >= filter.start && d <= filter.end;
-    });
-  })
-
   public applyDateFilter(start: string, end: string): void {
     if (start && end) {
       const endDate = new Date(end);
@@ -127,25 +97,8 @@ export class DashboardComponent {
       this.loadDashboardData();
     }
   }
-
-  public barChartData = computed(() => {
-    const content = this.filteredGains();
-    const monthlyCounts = content.reduce((acc: Record<string, number>, gain: any) => {
-      const date = new Date(gain.winDate);
-      if (isNaN(date.getTime())) return acc;
-      const monthYear = date.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' });
-      acc[monthYear] = (acc[monthYear] || 0) + 1;
-      return acc;
-    }, {});
-
-    return Object.entries(monthlyCounts).map(([name, value]) => ({
-      name,
-      value: value as number
-    }));
-  });
-
   public pieChartData = computed(() => {
-    const contentGains = this.filteredGains();
+    const contentGains = this.gains();
     const groups: { [key: string]: number } = {};
 
     contentGains.forEach(g => {
@@ -187,7 +140,7 @@ export class DashboardComponent {
   });
 
   public lineChartData = computed(() => {
-    const content = this.filteredStages();
+    const content = this.timeStages();
     const stageDays = content.reduce((acc: any, stage: VwTimeStageDTO) => {
       const stageName = verifyTransitions(stage.stageId) || 'Desconhecido';
       if (!acc[stageName]) acc[stageName] = { totalDays: 0, count: 0 };
@@ -210,7 +163,7 @@ export class DashboardComponent {
   });
 
   public transitionsChartData = computed(() => {
-    const content = this.filteredTransitions();
+    const content = this.transitions();
     const transitionCounts = content.reduce((acc: Record<string, number>, trans: VwTransitionsDTO) => {
       const label = `${verifyTransitions(trans.stageFrom)} → ${verifyTransitions(trans.stageTo)}`;
       acc[label] = (acc[label] || 0) + 1;

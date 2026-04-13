@@ -1,7 +1,6 @@
 package com.example.tradscorretora.config;
 
 import com.example.tradscorretora.domain.entity.*;
-import com.example.tradscorretora.domain.entity.views.VwTransicoes;
 import com.example.tradscorretora.domain.enums.RoleEnum;
 import com.example.tradscorretora.infrastructure.repositories.*;
 import org.springframework.boot.CommandLineRunner;
@@ -30,9 +29,11 @@ public class JsonData implements CommandLineRunner {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final PasswordEncoder passwordEncoder;
     private final UserAcessRepository userAcessRepository;
-    private final VwTransicoesRepository vwTransicoesRepository;
 
-    public JsonData(PipelineRepository pipelineRepository, VwTransicoesRepository vwTransicoesRepository, StageRepository stageRepository, UserRepository userRepository, BusinessDealRepository businessDealRepository, MovementRepository movementRepository, PasswordEncoder passwordEncoder, UserAcessRepository userAcessRepository) {
+    public JsonData(PipelineRepository pipelineRepository,
+            StageRepository stageRepository, UserRepository userRepository,
+            BusinessDealRepository businessDealRepository, MovementRepository movementRepository,
+            PasswordEncoder passwordEncoder, UserAcessRepository userAcessRepository) {
         this.pipelineRepository = pipelineRepository;
         this.stageRepository = stageRepository;
         this.userRepository = userRepository;
@@ -40,9 +41,7 @@ public class JsonData implements CommandLineRunner {
         this.movementRepository = movementRepository;
         this.passwordEncoder = passwordEncoder;
         this.userAcessRepository = userAcessRepository;
-        this.vwTransicoesRepository = vwTransicoesRepository;
     }
-
 
     @Override
     public void run(String... args) {
@@ -55,7 +54,7 @@ public class JsonData implements CommandLineRunner {
             importDeals();
             importMovements();
             createUserAccess();
-        }else{
+        } else {
             System.out.println("Dados já existem no banco, pulando importação.");
         }
 
@@ -63,7 +62,8 @@ public class JsonData implements CommandLineRunner {
 
     private void importPipelines() {
         InputStream json = getClass().getResourceAsStream("/Banco/pipelines.json");
-        List<PipelineEntity> pipelines = objectMapper.readValue(json, new TypeReference<>(){});
+        List<PipelineEntity> pipelines = objectMapper.readValue(json, new TypeReference<>() {
+        });
         pipelineRepository.saveAll(pipelines);
         System.out.println("✅ Pipelines importados.");
     }
@@ -71,7 +71,8 @@ public class JsonData implements CommandLineRunner {
     private void importStages() {
 
         List<StageEntity> stagesToSave = new ArrayList<>();
-        JsonNode stagesJson = objectMapper.readTree(TypeReference.class.getResourceAsStream("/Banco/etapas.json"));
+        InputStream json = getClass().getResourceAsStream("/Banco/etapas.json");
+        JsonNode stagesJson = objectMapper.readTree(json);
 
         Map<Long, PipelineEntity> pipelineMap = pipelineRepository.findAll().stream()
                 .collect(java.util.stream.Collectors.toMap(PipelineEntity::getId, pipeline -> pipeline));
@@ -107,7 +108,8 @@ public class JsonData implements CommandLineRunner {
 
     private void importDeals() {
         List<BusinessDealEntity> dealsToSave = new ArrayList<>();
-        JsonNode dealsJson = objectMapper.readTree(TypeReference.class.getResourceAsStream("/Banco/negocios.json"));
+        InputStream json = getClass().getResourceAsStream("/Banco/negocios.json");
+        JsonNode dealsJson = objectMapper.readTree(json);
         Map<Long, PipelineEntity> pipelineMap = pipelineRepository.findAll().stream()
                 .collect(java.util.stream.Collectors.toMap(PipelineEntity::getId, pipeline -> pipeline));
         Map<Long, UserEntity> userMap = userRepository.findAll().stream()
@@ -129,7 +131,7 @@ public class JsonData implements CommandLineRunner {
             deal.setClosed(node.get("closed").asBoolean());
             if (node.get("closedate") != null && !node.get("closedate").isNull()) {
                 deal.setCloseDate(LocalDate.parse(node.get("closedate").asString()));
-            }else{
+            } else {
                 deal.setCloseDate(null);
             }
             deal.setUtmSource(node.get("utm_source").asString(null));
@@ -166,7 +168,8 @@ public class JsonData implements CommandLineRunner {
 
     private void importMovements() {
         List<MovementEntity> movementsToSave = new ArrayList<>();
-        JsonNode movementsJson = objectMapper.readTree(TypeReference.class.getResourceAsStream("/Banco/movimentacoes.json"));
+        InputStream json = getClass().getResourceAsStream("/Banco/movimentacoes.json");
+        JsonNode movementsJson = objectMapper.readTree(json);
         Map<Long, PipelineEntity> pipelineMap = pipelineRepository.findAll().stream()
                 .collect(java.util.stream.Collectors.toMap(PipelineEntity::getId, pipeline -> pipeline));
         Map<Long, BusinessDealEntity> dealMap = businessDealRepository.findAll().stream()
@@ -174,13 +177,11 @@ public class JsonData implements CommandLineRunner {
         Map<String, StageEntity> stageMap = stageRepository.findAll().stream()
                 .collect(java.util.stream.Collectors.toMap(StageEntity::getStatusId, s -> s));
 
-
         for (JsonNode node : movementsJson) {
             MovementEntity movement = new MovementEntity();
             movement.setId(node.get("id").asLong());
             movement.setCreatedTime(LocalDateTime.parse(node.get("created_time").asString()));
             movement.setTypeId(node.get("type_id").asInt());
-
 
             Long pipeId = node.get("pipeline_id").asLong();
             Long dealId = node.get("id_negocio").asLong();

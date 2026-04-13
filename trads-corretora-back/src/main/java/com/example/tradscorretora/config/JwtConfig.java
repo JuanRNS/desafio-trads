@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.tradscorretora.domain.entity.UserAcess;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,35 +14,35 @@ import java.time.ZoneOffset;
 
 @Service
 public class JwtConfig {
-        @Value("${jwt.secret.key}")
-        private String SECRET;
+    @Value("${jwt.secret.key}")
+    private String SECRET;
 
-        public String generateToken(UserAcess userAcess) {
-            try{
-                Algorithm algorithm = Algorithm.HMAC256(SECRET);
-                return JWT.create()
-                        .withSubject(userAcess.getEmail())
-                        .withExpiresAt(getExpirationTime())
-                        .withClaim("role", userAcess.getRole().name())
-                        .sign(algorithm);
-            }catch(JWTCreationException exception){
-                throw new RuntimeException("Error creating JWT token", exception);
-            }
+    public String generateToken(UserAcess userAcess) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET);
+            return JWT.create()
+                    .withSubject(userAcess.getEmail())
+                    .withExpiresAt(getExpirationTime())
+                    .withClaim("role", userAcess.getRole().name())
+                    .sign(algorithm);
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Error creating JWT token", exception);
         }
+    }
 
-        public String validateToken(String token) {
-            try {
-                Algorithm algorithm = Algorithm.HMAC256(SECRET);
-                return JWT.require(algorithm)
-                        .build()
-                        .verify(token)
-                        .getSubject();
-            } catch (JWTVerificationException exception) {
-                return null;
-            }
+    public String validateToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET);
+            return JWT.require(algorithm)
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException exception) {
+            return null;
         }
+    }
 
-        private Instant getExpirationTime() {
-            return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
-        }
+    private Instant getExpirationTime() {
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
 }

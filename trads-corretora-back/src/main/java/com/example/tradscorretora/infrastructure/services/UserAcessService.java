@@ -3,7 +3,6 @@ package com.example.tradscorretora.infrastructure.services;
 import com.example.tradscorretora.config.JwtConfig;
 import com.example.tradscorretora.domain.dto.UserRequestDTO;
 import com.example.tradscorretora.domain.entity.UserAcess;
-import com.example.tradscorretora.infrastructure.repositories.UserAcessRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,18 +11,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserAcessService {
 
-    private final UserAcessRepository userAcessRepository;
     private final JwtConfig jwtConfig;
     private final AuthenticationManager authenticationManager;
 
-    public UserAcessService(UserAcessRepository userAcessRepository, JwtConfig jwtConfig, AuthenticationManager authenticationManager) {
-        this.userAcessRepository = userAcessRepository;
+    public UserAcessService(JwtConfig jwtConfig, AuthenticationManager authenticationManager) {
         this.jwtConfig = jwtConfig;
         this.authenticationManager = authenticationManager;
     }
 
     public String authenticate(UserRequestDTO userRequestDTO) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userRequestDTO.email(), userRequestDTO.password());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userRequestDTO.email(),
+                userRequestDTO.password());
         Authentication authentication = authenticationManager.authenticate(authToken);
         UserAcess userAcess = (UserAcess) authentication.getPrincipal();
         if (userAcess == null) {
