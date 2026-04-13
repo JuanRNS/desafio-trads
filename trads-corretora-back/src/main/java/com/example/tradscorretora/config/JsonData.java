@@ -46,20 +46,18 @@ public class JsonData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        importPipelines();
-        importStages();
-        importUsers();
-        importDeals();
-        importMovements();
-        createUserAccess();
-//        if (pipelineRepository.count() == 0) {
-//            System.out.println("Importando dados do JSON para o banco de dados...");
-//            importPipelines();
-//            importStages();
-//            importUsers();
-//        }else{
-//            System.out.println("Dados já existem no banco, pulando importação.");
-//        }
+
+        if (pipelineRepository.count() == 0) {
+            System.out.println("Importando dados do JSON para o banco de dados...");
+            importPipelines();
+            importStages();
+            importUsers();
+            importDeals();
+            importMovements();
+            createUserAccess();
+        }else{
+            System.out.println("Dados já existem no banco, pulando importação.");
+        }
 
     }
 

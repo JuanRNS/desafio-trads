@@ -18,15 +18,6 @@ public class JwtConfig {
         @Value("${jwt.secret.key}")
         private String SECRET;
 
-    @PostConstruct
-    public void init() {
-        if (SECRET == null || SECRET.isEmpty()) {
-            System.err.println("ERRO CRÍTICO: Chave JWT não foi carregada!");
-        } else {
-            System.out.println("JWT Secret carregada com sucesso.");
-        }
-    }
-
         public String generateToken(UserAcess userAcess) {
             try{
                 Algorithm algorithm = Algorithm.HMAC256(SECRET);
@@ -53,6 +44,6 @@ public class JwtConfig {
         }
 
         private Instant getExpirationTime() {
-            return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.UTC);
+            return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
         }
 }

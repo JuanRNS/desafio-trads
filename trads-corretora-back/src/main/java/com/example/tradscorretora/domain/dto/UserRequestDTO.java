@@ -1,6 +1,6 @@
 package com.example.tradscorretora.domain.dto;
 
-public record UserRequest(
+public record UserRequestDTO(
         String email,
         String password
 ){

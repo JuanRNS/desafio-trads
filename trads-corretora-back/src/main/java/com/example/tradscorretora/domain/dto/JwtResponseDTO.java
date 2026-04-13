@@ -1,6 +1,6 @@
 package com.example.tradscorretora.domain.dto;
 
-public record JwtResponse(
+public record JwtResponseDTO(
         String token
 ) {
 }

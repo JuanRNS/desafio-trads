@@ -30,5 +30,7 @@ public class VwTimeStage {
         @Column(name = "fim")
         private Timestamp end;
         @Column(name = "dias_na_etapa")
-        private Timestamp daysInStage;
+        private Long daysInStage;
+        @Column(name = "assigned_user_id")
+        private Long userId;
 }

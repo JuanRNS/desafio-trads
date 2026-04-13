@@ -1,7 +1,7 @@
 package com.example.tradscorretora.infrastructure.controllers;
 
-import com.example.tradscorretora.domain.dto.JwtResponse;
-import com.example.tradscorretora.domain.dto.UserRequest;
+import com.example.tradscorretora.domain.dto.JwtResponseDTO;
+import com.example.tradscorretora.domain.dto.UserRequestDTO;
 import com.example.tradscorretora.infrastructure.services.UserAcessService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +20,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody UserRequest userAcess) {
+    public ResponseEntity<JwtResponseDTO> login(@RequestBody UserRequestDTO userAcess) {
         String token = userAcessService.authenticate(userAcess);
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new JwtResponseDTO(token));
     }
 }

@@ -1,8 +1,7 @@
 package com.example.tradscorretora.infrastructure.services;
 
 import com.example.tradscorretora.config.JwtConfig;
-import com.example.tradscorretora.domain.dto.JwtResponse;
-import com.example.tradscorretora.domain.dto.UserRequest;
+import com.example.tradscorretora.domain.dto.UserRequestDTO;
 import com.example.tradscorretora.domain.entity.UserAcess;
 import com.example.tradscorretora.infrastructure.repositories.UserAcessRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,8 +22,8 @@ public class UserAcessService {
         this.authenticationManager = authenticationManager;
     }
 
-    public String authenticate(UserRequest userRequest) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userRequest.email(), userRequest.password());
+    public String authenticate(UserRequestDTO userRequestDTO) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userRequestDTO.email(), userRequestDTO.password());
         Authentication authentication = authenticationManager.authenticate(authToken);
         UserAcess userAcess = (UserAcess) authentication.getPrincipal();
         if (userAcess == null) {

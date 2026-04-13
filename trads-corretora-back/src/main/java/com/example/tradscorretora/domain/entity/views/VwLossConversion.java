@@ -8,31 +8,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 
-import java.sql.Timestamp;
-
 @Entity
-@Table(name = "vw_transicoes")
-@Immutable
+@Table(name = "vw_loss_conversion" )
 @Getter
 @NoArgsConstructor
-public class VwTransicoes {
+@Immutable
+public class VwLossConversion {
+
     @Id
     @Column(name = "id_movimentacao")
     private Long id;
-    @Column(name = "id_negocio")
-    private Long idNegocio;
-    @Column(name = "pipeline_id")
-    private Long pipelineId;
     @Column(name = "stage_from")
     private String stageFrom;
-    @Column(name = "stage_to")
-    private String stageTo;
-    @Column(name = "t_transicao")
-    private Timestamp transicao;
-    @Column(name = "sort_from")
-    private Integer sortFrom;
-    @Column(name = "sort_to")
-    private Integer sortTo;
+    @Column(name = "status_id")
+    private String statusId;
+    @Column(name = "total_transicoes")
+    private Long totalTransitions;
     @Column(name = "assigned_user_id")
     private Long userId;
 }
