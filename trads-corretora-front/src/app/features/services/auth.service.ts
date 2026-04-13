@@ -1,21 +1,24 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpAbstract } from '../../core/abstract/http.abstract';
 import { AuthRequest, AuthResponse, DecodedToken } from '../../core/interfaces/auth.interface';
 import { Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService extends HttpAbstract {
   public currentUserRole = signal<string | null>(null);
+  public currentUserEmail = signal<string | null>(null);
+
 
   constructor() {
-    super();
+    super('http://localhost:8080', inject(HttpClient));
     this.hydrateUserContext();
   }
 
   public login(credentials: AuthRequest): Observable<AuthResponse> {
-    return this.post<AuthResponse>('auth/login', credentials).pipe(
+    return this.post<AuthResponse>(`/auth/login`, credentials).pipe(
       tap((response) => this.handleAuthentication(response.token))
     );
   }
@@ -23,6 +26,7 @@ export class AuthService extends HttpAbstract {
   public logout(): void {
     localStorage.removeItem('token');
     this.currentUserRole.set(null);
+    this.currentUserEmail.set(null);
   }
 
   public isAuthenticated(): boolean {
@@ -51,8 +55,9 @@ export class AuthService extends HttpAbstract {
     const token = this.getToken();
     if (token) {
       const decoded = this.decodeToken(token);
-      if (decoded && decoded.role) {
-        this.currentUserRole.set(decoded.role);
+      if (decoded) {
+        if (decoded.role) this.currentUserRole.set(decoded.role);
+        if (decoded.sub) this.currentUserEmail.set(decoded.sub);
       }
     }
   }

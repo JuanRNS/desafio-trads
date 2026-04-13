@@ -1,6 +1,6 @@
 export interface AuthRequest {
   email: string;
-  senha?: string; // Optional if you have other auth types, but mostly required
+  senha?: string;
 }
 
 export interface AuthResponse {

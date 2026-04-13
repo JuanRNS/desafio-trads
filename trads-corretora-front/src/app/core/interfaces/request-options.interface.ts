@@ -1,6 +1,5 @@
-import { HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpParams } from "@angular/common/http";
 
 export interface RequestOptions {
-    headers?: HttpHeaders | { [header: string]: string | string[] };
     params?: HttpParams | { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> };
 }

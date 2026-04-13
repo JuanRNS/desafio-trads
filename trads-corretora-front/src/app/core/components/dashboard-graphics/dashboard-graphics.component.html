@@ -1,0 +1,15 @@
+<div class="chart-container w-full h-full min-h-[300px]">
+  @if (chartType() === 'number-card') {
+  <div>
+    @for (item of data(); track item.name) {
+    <div class="p-4 bg-slate-100 rounded-lg text-center">
+      <p class="text-sm text-gray-500">{{ item.name }}</p>
+      <p class="text-2xl font-bold">{{ item.value }}</p>
+    </div>
+    }
+  </div>
+  } @else {
+  <canvas baseChart [data]="chartData()" [options]="chartOptions()" [type]="getChartType(chartType())">
+  </canvas>
+  }
+</div>

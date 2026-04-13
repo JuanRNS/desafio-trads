@@ -1,39 +1,46 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RequestOptions } from '../interfaces/request-options.interface';
 import { HTTP } from '../enums/http-methods.enum';
 
-
-
 export abstract class HttpAbstract {
-    protected readonly http = inject(HttpClient);
+    constructor(
+        private readonly _baseUrl: string,
+        private readonly _http: HttpClient
+    ) { }
 
     protected request<T>(
         method: HTTP,
-        url: string,
+        path: string,
         body?: any,
         options?: RequestOptions
     ): Observable<T> {
-        return this.http.request<T>(method, url, {
+        const token = localStorage.getItem('token');
+        let headers = new HttpHeaders();
+        if (token) {
+            headers = headers.set('Authorization', `Bearer ${token}`);
+        }
+        return this._http.request<T>(method, `${this._baseUrl}${path}`, {
             body,
-            ...options
+            ...options,
+            headers: headers
         });
     }
 
-    public get<T>(url: string, options?: RequestOptions): Observable<T> {
-        return this.request<T>(HTTP.GET, url, undefined, options);
+    public get<T>(path: string, options?: RequestOptions): Observable<T> {
+        return this.request<T>(HTTP.GET, path, undefined, options);
     }
 
-    public post<T>(url: string, body: any, options?: RequestOptions): Observable<T> {
-        return this.request<T>(HTTP.POST, url, body, options);
+    public post<T>(path: string, body: any): Observable<T> {
+        return this.request<T>(HTTP.POST, path, body);
     }
 
-    public put<T>(url: string, body: any, options?: RequestOptions): Observable<T> {
-        return this.request<T>(HTTP.PUT, url, body, options);
+    public put<T>(path: string, body: any): Observable<T> {
+        return this.request<T>(HTTP.PUT, path, body);
     }
 
-    public delete<T>(url: string, options?: RequestOptions): Observable<T> {
-        return this.request<T>(HTTP.DELETE, url, undefined, options);
+    public delete<T>(path: string): Observable<T> {
+        return this.request<T>(HTTP.DELETE, path, undefined,);
     }
 }

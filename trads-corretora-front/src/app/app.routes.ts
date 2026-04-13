@@ -5,8 +5,8 @@ import { DashboardComponent } from './features/views/dashboard/dashboard.compone
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { 
-    path: '', 
+  {
+    path: '',
     component: DashboardComponent,
     canActivate: [authGuard]
   },

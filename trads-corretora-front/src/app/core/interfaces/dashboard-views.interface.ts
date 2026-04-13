@@ -1,49 +1,71 @@
-/**
- * Representa a visão de fechamentos com ganho (vw_fechamento_ganho)
- */
-export interface VwFechamentoGanho {
-  id_negocio: number;
-  pipeline_id: number;
-  data_ganho: string;
+export interface PageResponse<T> {
+  content: T[];
+  pageable: any;
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  size: number;
+  number: number;
+  sort: any;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
+
+export interface VwGainDTO {
+  id: number;
+  idNegocio: number;
+  pipelineId: number;
+  winDate: string;
   opportunity: number;
-  currency_id: string;
-  assigned_user_id: number;
+  currencyId: string;
+  userId: number;
 }
 
-/**
- * Representa a visão de fechamentos perdidos (vw_fechamento_perda)
- */
-export interface VwFechamentoPerda {
-  id_negocio: number;
-  pipeline_id: number;
-  data_perda: string;
+export interface VwLossDTO {
+  id: number;
+  idNegocio: number;
+  pipelineId: number;
+  lossDate: string;
   opportunity: number;
-  currency_id: string;
-  assigned_user_id: number;
+  currencyId: string;
+  userId: number;
 }
 
-/**
- * Representa a visão de tempo em cada etapa (vw_tempo_em_etapa)
- */
-export interface VwTempoEmEtapa {
-  id_negocio: number;
-  stage_id: string;
-  pipeline_id: number;
-  inicio: string;
-  fim: string | null;
-  dias_na_etapa: number;
+export interface VwTimeStageDTO {
+  id: number;
+  idNegocio: number;
+  pipelineId: number;
+  stageId: string;
+  start: string;
+  end: string;
+  daysInStage: number;
 }
 
-/**
- * Representa a visão das transições de funil (vw_transicoes)
- */
-export interface VwTransicoes {
-  id_movimentacao: number;
-  id_negocio: number;
-  pipeline_id: number;
-  stage_from: string | null;
-  stage_to: string;
-  t_transicao: string;
-  sort_from: number | null;
-  sort_to: number;
+export interface VwTransitionsDTO {
+  id: number;
+  idNegocio: number;
+  pipelineId: number;
+  stageFrom: string;
+  stageTo: string;
+  transition: string;
+  sortTo: number;
+  sortFrom: number;
 }
+
+export interface VwLossConversion {
+  statusId: String,
+  stageFrom: String,
+  count: number
+}
+
+export interface UsersDTO {
+  id: number;
+  name: string;
+}
+
+export interface StageDTO {
+  id: number;
+  statusId: string;
+}
+
