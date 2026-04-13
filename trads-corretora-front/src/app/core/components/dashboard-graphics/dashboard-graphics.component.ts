@@ -9,16 +9,16 @@ import { BaseChartDirective } from 'ng2-charts';
   styleUrl: './dashboard-graphics.component.css',
 })
 export class DashboardGraphicsComponent {
-  readonly data = input<{ name: string; value: number }[]>([]);
-  readonly chartType = input<string>('bar-vertical');
-  readonly xAxisLabel = input<string>('');
-  readonly yAxisLabel = input<string>('');
-  readonly showXAxis = input<boolean>(true);
-  readonly showYAxis = input<boolean>(true);
-  readonly showLegend = input<boolean>(true);
-  readonly tooltipDisabled = input<boolean>(false);
+  public readonly data = input<{ name: string; value: number }[]>([]);
+  public readonly chartType = input<string>('bar-vertical');
+  public readonly xAxisLabel = input<string>('');
+  public readonly yAxisLabel = input<string>('');
+  public readonly showXAxis = input<boolean>(true);
+  public readonly showYAxis = input<boolean>(true);
+  public readonly showLegend = input<boolean>(true);
+  public readonly tooltipDisabled = input<boolean>(false);
 
-  getChartType(type: string): ChartType {
+  public getChartType(type: string): ChartType {
     const map: Record<string, ChartType> = {
       'bar-vertical': 'bar',
       'bar-horizontal': 'bar',
@@ -30,7 +30,7 @@ export class DashboardGraphicsComponent {
     return map[type] || 'bar';
   }
 
-  readonly chartData = computed<ChartData>(() => {
+  public readonly chartData = computed<ChartData>(() => {
     const rawData = this.data() || [];
     return {
       labels: rawData.map(d => d.name),
@@ -48,7 +48,7 @@ export class DashboardGraphicsComponent {
     };
   });
 
-  readonly chartOptions = computed<ChartConfiguration['options']>(() => {
+  public readonly chartOptions = computed<ChartConfiguration['options']>(() => {
     const isBarOrLine = this.chartType().includes('bar') || this.chartType() === 'line';
 
     return {

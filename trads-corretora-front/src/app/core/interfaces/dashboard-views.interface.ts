@@ -1,4 +1,4 @@
-export interface PageResponse<T> {
+export interface IPageResponse<T> {
   content: T[];
   pageable: any;
   totalPages: number;
@@ -12,7 +12,7 @@ export interface PageResponse<T> {
   empty: boolean;
 }
 
-export interface VwGainDTO {
+export interface IVwGain {
   id: number;
   idNegocio: number;
   pipelineId: number;
@@ -22,7 +22,7 @@ export interface VwGainDTO {
   userId: number;
 }
 
-export interface VwLossDTO {
+export interface IVwLoss {
   id: number;
   idNegocio: number;
   pipelineId: number;
@@ -32,7 +32,7 @@ export interface VwLossDTO {
   userId: number;
 }
 
-export interface VwTimeStageDTO {
+export interface IVwTimeStage {
   id: number;
   idNegocio: number;
   pipelineId: number;
@@ -42,7 +42,7 @@ export interface VwTimeStageDTO {
   daysInStage: number;
 }
 
-export interface VwTransitionsDTO {
+export interface IVwTransitions {
   id: number;
   idNegocio: number;
   pipelineId: number;
@@ -53,18 +53,18 @@ export interface VwTransitionsDTO {
   sortFrom: number;
 }
 
-export interface VwLossConversion {
+export interface IVwLossConversion {
   statusId: String,
   stageFrom: String,
   count: number
 }
 
-export interface UsersDTO {
+export interface IUsers {
   id: number;
   name: string;
 }
 
-export interface StageDTO {
+export interface IStage {
   id: number;
   statusId: string;
 }

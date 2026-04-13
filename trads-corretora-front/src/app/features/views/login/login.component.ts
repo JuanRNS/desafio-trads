@@ -45,10 +45,10 @@ export class LoginComponent {
     });
   }
 
-  get verifyPassword() {
+  public get verifyPassword() {
     return this.password?.invalid && (this.password?.dirty || this.password?.touched);
   }
 
-  get email() { return this.loginForm.get('email'); }
-  get password() { return this.loginForm.get('password'); }
+  public get email() { return this.loginForm.get('email'); }
+  public get password() { return this.loginForm.get('password'); }
 }

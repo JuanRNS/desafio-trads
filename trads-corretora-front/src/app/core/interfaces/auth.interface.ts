@@ -1,13 +1,13 @@
-export interface AuthRequest {
+export interface IAuthRequest {
   email: string;
   senha?: string;
 }
 
-export interface AuthResponse {
+export interface IAuthResponse {
   token: string;
 }
 
-export interface DecodedToken {
+export interface IDecodedToken {
   role?: string;
   sub?: string;
   exp?: number;

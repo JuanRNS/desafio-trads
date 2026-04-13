@@ -1,53 +1,51 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
-  PageResponse,
-  StageDTO,
-  UsersDTO,
-  VwGainDTO,
-  VwLossConversion,
-  VwLossDTO,
-  VwTimeStageDTO,
-  VwTransitionsDTO,
+  IPageResponse,
+  IStage,
+  IUsers,
+  IVwGain,
+  IVwLossConversion,
+  IVwLoss,
+  IVwTimeStage,
+  IVwTransitions,
 } from '../../core/interfaces/dashboard-views.interface';
 import { HttpAbstract } from '../../core/abstract/http.abstract';
-import { environment } from '../../env/enviroments.dev';
+import { environment } from '../../env/enviroments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService extends HttpAbstract {
-  constructor() {
-    super(environment.apiUrl, inject(HttpClient));
-  }
-  getGains(userId?: number, startDate?: string, endDate?: string): Observable<PageResponse<VwGainDTO>> {
+  protected readonly baseUrl: string = environment.apiUrl;
+  getGains(userId?: number, startDate?: string, endDate?: string): Observable<IPageResponse<IVwGain>> {
     const params = this.createParams(userId, startDate, endDate);
-    return this.get<PageResponse<VwGainDTO>>(`/dashboard/vw-gain`, { params });
+    return this.get<IPageResponse<IVwGain>>(`/dashboard/vw-gain`, { params });
   }
 
-  getLosses(userId?: number, startDate?: string, endDate?: string): Observable<PageResponse<VwLossDTO>> {
+  getLosses(userId?: number, startDate?: string, endDate?: string): Observable<IPageResponse<IVwLoss>> {
     const params = this.createParams(userId, startDate, endDate);
-    return this.get<PageResponse<VwLossDTO>>(`/dashboard/vw-loss`, { params });
+    return this.get<IPageResponse<IVwLoss>>(`/dashboard/vw-loss`, { params });
   }
 
-  getTimeStages(userId?: number, startDate?: string, endDate?: string): Observable<PageResponse<VwTimeStageDTO>> {
+  getTimeStages(userId?: number, startDate?: string, endDate?: string): Observable<IPageResponse<IVwTimeStage>> {
     const params = this.createParams(userId, startDate, endDate);
-    return this.get<PageResponse<VwTimeStageDTO>>(`/dashboard/vw-time-stage`, { params });
+    return this.get<IPageResponse<IVwTimeStage>>(`/dashboard/vw-time-stage`, { params });
   }
 
-  getTransitions(userId?: number, startDate?: string, endDate?: string): Observable<PageResponse<VwTransitionsDTO>> {
+  getTransitions(userId?: number, startDate?: string, endDate?: string): Observable<IPageResponse<IVwTransitions>> {
     const params = this.createParams(userId, startDate, endDate);
-    return this.get<PageResponse<VwTransitionsDTO>>(`/dashboard/vw-transitions`, { params });
+    return this.get<IPageResponse<IVwTransitions>>(`/dashboard/vw-transitions`, { params });
   }
 
-  getLossConversion(userId?: number, startDate?: string, endDate?: string): Observable<VwLossConversion[]> {
+  getLossConversion(userId?: number, startDate?: string, endDate?: string): Observable<IVwLossConversion[]> {
     const params = this.createParams(userId, startDate, endDate);
-    return this.get<VwLossConversion[]>(`/dashboard/vw-loss-conversion`, { params });
+    return this.get<IVwLossConversion[]>(`/dashboard/vw-loss-conversion`, { params });
   }
 
-  getAllUsers(): Observable<UsersDTO[]> {
-    return this.get<UsersDTO[]>(`/users/list`);
+  getAllUsers(): Observable<IUsers[]> {
+    return this.get<IUsers[]>(`/users/list`);
   }
 
   private createParams(userId?: number, startDate?: string, endDate?: string): HttpParams {

@@ -4,7 +4,7 @@ import { DashboardGraphicsComponent } from '../../../core/components/dashboard-g
 import { DashboardService } from '../../services/dashboard.service';
 import { HeaderComponent } from "../../../core/components/header/header.component";
 import { AuthService } from '../../services/auth.service';
-import { VwGainDTO, VwLossDTO, VwTimeStageDTO, VwTransitionsDTO, VwLossConversion, UsersDTO } from '../../../core/interfaces/dashboard-views.interface';
+import { IVwGain, IVwLoss, IVwTimeStage, IVwTransitions, IVwLossConversion, IUsers } from '../../../core/interfaces/dashboard-views.interface';
 import verifyTransitions from '../../../core/utils/verify-transitions';
 
 @Component({
@@ -18,12 +18,12 @@ export class DashboardComponent {
   public authService = inject(AuthService);
   public role = this.authService.currentUserRole();
 
-  public gains = signal<VwGainDTO[]>([]);
-  public losses = signal<VwLossDTO[]>([]);
-  public timeStages = signal<VwTimeStageDTO[]>([]);
-  public transitions = signal<VwTransitionsDTO[]>([]);
-  public lossConversions = signal<VwLossConversion[]>([]);
-  public users = signal<UsersDTO[]>([]);
+  public gains = signal<IVwGain[]>([]);
+  public losses = signal<IVwLoss[]>([]);
+  public timeStages = signal<IVwTimeStage[]>([]);
+  public transitions = signal<IVwTransitions[]>([]);
+  public lossConversions = signal<IVwLossConversion[]>([]);
+  public users = signal<IUsers[]>([]);
   public dateFilter = signal<{ start: Date, end: Date } | null>(null);
   public filterType = signal<'day' | 'week' | 'month'>('month');
   public transitionsFilter = signal<'ALL' | 'P0' | 'P10' | 'P20'>('ALL');
@@ -31,10 +31,12 @@ export class DashboardComponent {
   public selectedUserId = signal<number | null>(null);
 
   ngOnInit(): void {
-    this.dashboardService.getAllUsers().subscribe({
-      next: (res) => this.users.set(res),
-      error: (err) => console.error('Erro ao buscar Usuários:', err)
-    });
+    if (this.role === 'ADMIN' || this.role === 'MANAGER') {
+      this.dashboardService.getAllUsers().subscribe({
+        next: (res) => this.users.set(res),
+        error: (err) => console.error('Erro ao buscar Usuários:', err)
+      });
+    }
     this.loadDashboardData();
   }
 
@@ -141,7 +143,7 @@ export class DashboardComponent {
 
   public lineChartData = computed(() => {
     const content = this.timeStages();
-    const stageDays = content.reduce((acc: any, stage: VwTimeStageDTO) => {
+    const stageDays = content.reduce((acc: any, stage: IVwTimeStage) => {
       const stageName = verifyTransitions(stage.stageId) || 'Desconhecido';
       if (!acc[stageName]) acc[stageName] = { totalDays: 0, count: 0 };
       acc[stageName].totalDays += (stage.daysInStage || 0);
@@ -164,7 +166,7 @@ export class DashboardComponent {
 
   public transitionsChartData = computed(() => {
     const content = this.transitions();
-    const transitionCounts = content.reduce((acc: Record<string, number>, trans: VwTransitionsDTO) => {
+    const transitionCounts = content.reduce((acc: Record<string, number>, trans: IVwTransitions) => {
       const label = `${verifyTransitions(trans.stageFrom)} → ${verifyTransitions(trans.stageTo)}`;
       acc[label] = (acc[label] || 0) + 1;
       return acc;

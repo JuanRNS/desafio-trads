@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://api.trads.com.br',
+    apiUrl: '' //@TODO: Colocar a URL da API em produção
 };

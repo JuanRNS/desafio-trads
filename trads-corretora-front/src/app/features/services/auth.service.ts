@@ -1,8 +1,8 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpAbstract } from '../../core/abstract/http.abstract';
-import { AuthRequest, AuthResponse, DecodedToken } from '../../core/interfaces/auth.interface';
+import { IAuthRequest, IAuthResponse, IDecodedToken } from '../../core/interfaces/auth.interface';
 import { Observable, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { environment } from '../../env/enviroments';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +10,15 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService extends HttpAbstract {
   public currentUserRole = signal<string | null>(null);
   public currentUserEmail = signal<string | null>(null);
-
+  protected readonly baseUrl: string = environment.apiUrl;
 
   constructor() {
-    super('http://localhost:8080', inject(HttpClient));
+    super();
     this.hydrateUserContext();
   }
 
-  public login(credentials: AuthRequest): Observable<AuthResponse> {
-    return this.post<AuthResponse>(`/auth/login`, credentials).pipe(
+  public login(credentials: IAuthRequest): Observable<IAuthResponse> {
+    return this.post<IAuthResponse>(`/auth/login`, credentials).pipe(
       tap((response) => this.handleAuthentication(response.token))
     );
   }
@@ -62,7 +62,7 @@ export class AuthService extends HttpAbstract {
     }
   }
 
-  private decodeToken(token: string): DecodedToken | null {
+  private decodeToken(token: string): IDecodedToken | null {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -70,7 +70,7 @@ export class AuthService extends HttpAbstract {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
 
-      return JSON.parse(jsonPayload) as DecodedToken;
+      return JSON.parse(jsonPayload) as IDecodedToken;
     } catch (e) {
       console.error('Invalid token format', e);
       return null;
