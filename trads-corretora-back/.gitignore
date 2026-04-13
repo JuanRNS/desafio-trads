@@ -3,7 +3,6 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-sql/validacao.sql
 saida/crm_trads.db
 ### STS ###
 .apt_generated
