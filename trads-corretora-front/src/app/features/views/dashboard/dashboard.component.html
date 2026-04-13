@@ -130,7 +130,7 @@
         </div>
       </div>
       <div class="h-80 md:h-[350px] w-full">
-        <app-dashboard-graphics [chartType]="'bar'" [data]="lineChartData()" xAxisLabel="Etapa" yAxisLabel="Dias">
+        <app-dashboard-graphics [chartType]="'bar'" [data]="barChartData()" xAxisLabel="Etapa" yAxisLabel="Dias">
         </app-dashboard-graphics>
       </div>
     </div>
@@ -140,7 +140,7 @@
       <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex flex-col">
         <h2 class="text-lg font-semibold text-slate-700 mb-4">Ganhos no tempo</h2>
         <div class="h-80 md:h-[350px] w-full">
-          <app-dashboard-graphics [chartType]="'line'" [data]="pieChartData()" [showLegend]="true">
+          <app-dashboard-graphics [chartType]="'line'" [data]="lineChartData()" [showLegend]="true">
           </app-dashboard-graphics>
         </div>
 

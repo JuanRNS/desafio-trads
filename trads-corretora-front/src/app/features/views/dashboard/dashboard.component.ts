@@ -99,7 +99,7 @@ export class DashboardComponent {
       this.loadDashboardData();
     }
   }
-  public pieChartData = computed(() => {
+  public lineChartData = computed(() => {
     const contentGains = this.gains();
     const groups: { [key: string]: number } = {};
 
@@ -141,9 +141,9 @@ export class DashboardComponent {
     });
   });
 
-  public lineChartData = computed(() => {
+  public barChartData = computed(() => {
     const content = this.timeStages();
-    const stageDays = content.reduce((acc: any, stage: IVwTimeStage) => {
+    const stageDays = content.reduce((acc: Record<string, { totalDays: number, count: number }>, stage: IVwTimeStage) => {
       const stageName = verifyTransitions(stage.stageId) || 'Desconhecido';
       if (!acc[stageName]) acc[stageName] = { totalDays: 0, count: 0 };
       acc[stageName].totalDays += (stage.daysInStage || 0);
@@ -151,7 +151,7 @@ export class DashboardComponent {
       return acc;
     }, {} as Record<string, { totalDays: number, count: number }>);
 
-    let data = Object.entries(stageDays).map(([name, data]: any) => ({
+    let data = Object.entries(stageDays).map(([name, data]) => ({
       name: `Etapa ${name}`,
       value: Math.round(data.totalDays / data.count)
     }));
