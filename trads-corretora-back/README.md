@@ -41,6 +41,13 @@ A separação `domain` × `infrastructure` garante que a camada de negócio não
 
 ---
 
+## 🚀 Versionamento de Banco de Dados — Flyway
+Diferente da abordagem padrão de deixar o Hibernate gerar as tabelas (ddl-auto=update), este projeto utiliza o Flyway para garantir a evolução controlada e a reprodutibilidade do banco de dados.
+
+Histórico de Alterações: Localizado em src/main/resources/db/migration, os scripts SQL seguem a ordem cronológica (V1, V2, etc.).
+
+Independência de Framework: As tabelas e, principalmente, as Views Analíticas são criadas via SQL puro, garantindo que a lógica de banco seja preservada independentemente da versão do ORM.
+
 ## 📦 Carga de Dados — ETL via JsonData
 
 A classe `JsonData` implementa `CommandLineRunner` — **executa automaticamente ao iniciar a aplicação**, funcionando como um ETL simplificado:
